@@ -260,7 +260,7 @@ def cmd_aupdate(): # update code through git, then reboot
     oled.write_lines("Running git pull",
                      "and reboot")
     time.sleep(0.5)
-    EXIT_CMD = "git pull && sudo shutdown -r now"
+    EXIT_CMD = "cd /home/pi/robot && git pull && sudo shutdown -r now"
     return True
 def cmd_ashutdown(): # set CMD to shutdown and then quit
     global EXIT_CMD
