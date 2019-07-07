@@ -255,13 +255,24 @@ def cmd_wiimote():
 
 def cmd_aexit():
     return True
-def cmd_aupdate(): # update code through git, then reboot
-    global EXIT_CMD
-    oled.write_lines("Running git pull",
-                     "and reboot")
+def cmd_aupdate(): # update code through git
+    oled.write_line(0, "Running git pull", 1)
+    oled.write_line(1, "....", 1)
     time.sleep(0.5)
-    EXIT_CMD = "cd /home/pi/robot && git pull && sudo shutdown -r now"
-    return True
+    rcode = subprocess.call("cd /home/pi/robot && git pull --ff-only", shell=True) # --ff-only stops it from merging
+    if rcode == 0:
+        oled.write_line(1, "Success!", 1)
+        time.sleep(1)
+        oled.write_lines("Restart for pull",
+                         " to take effect ")
+        time.sleep(2)
+    else:
+        oled.write_line(1, "Failed", 1)
+        time.sleep(1)
+        oled.write_line(0, "Try manually", 1)
+        oled.write_line(1, "pulling/merging", 1)
+        time.sleep(2)
+    return False
 def cmd_ashutdown(): # set CMD to shutdown and then quit
     global EXIT_CMD
     EXIT_CMD = "sudo shutdown -h now"
@@ -429,7 +440,7 @@ try:
             if r is True:
                 break
         menu_loc %= len(menu_items)
-        
+
     oled.write_line(0, "Goodbye!", 1)
     oled.write_line(1, "")
     set_led_int(15)
