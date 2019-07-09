@@ -24,7 +24,7 @@ def get_ipl_data(ipl):
     m = IPL_RE.match(ipl)
     if m is None:
         return None
-    
+
     if m.group(1)[0] == "6": ipv=6; addr=m.group(3)
     else: ipv=4; addr=m.group(2)
     masksize = m.group(4)
@@ -46,6 +46,9 @@ def get_good_ips():
 
 def get_model():
     return run_cmd("cat /proc/device-tree/model").rstrip("\x00")
+
+def get_git_revision():
+    return run_cmd("git rev-parse --short HEAD")
 # ----------------------------
 
 oled.init()
@@ -67,6 +70,11 @@ try:
             time.sleep(0.5)
     else:
         time.sleep(3)
+
+    logging.debug("OLED: Displaying code revision")
+    oled.write_line(0, "Code revision:", 1)
+    oled.write_line(1, get_git_revision(), 1)
+    time.sleep(2)
 
     logging.debug("OLED: Displaying model")
     model = get_model()

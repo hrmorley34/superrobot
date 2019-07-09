@@ -107,6 +107,7 @@ def cmd_pass():
     return False
 
 def cmd_run():
+    logging.debug("Running cmd_run")
     if WIIMOTE is None:
         oled.write_line(0, "No wiimote", 1)
         oled.write_line(1, "conencted", 1)
@@ -141,6 +142,7 @@ def cmd_run():
     return False
 
 def cmd_wconnect():
+    logging.debug("Running cmd_wconnect")
     global WIIMOTE, ACC_CAL
     if WIIMOTE is None:
         oled.write_line(0, "Connecting WM", 1)
@@ -187,6 +189,7 @@ def cmd_wconnect():
             time.sleep(0.2)
     return False
 def cmd_wcalibrate():
+    logging.debug("Running cmd_wcalibrate")
     global ACC_CAL
     if WIIMOTE is None:
         oled.write_line(0, "No wiimote", 1)
@@ -231,6 +234,7 @@ def cmd_wcalibrate():
             time.sleep(0.2)
         loc %= 4
 def cmd_wiimote():
+    logging.debug("Running cmd_wiimote")
     wm_items = [("Connect", cmd_wconnect),
                 ("Calibration", cmd_wcalibrate)]
     loc = 0
@@ -254,8 +258,10 @@ def cmd_wiimote():
         loc %= len(wm_items)
 
 def cmd_aexit():
+    logging.debug("Running cmd_aexit")
     return True
 def cmd_aupdate(): # update code through git
+    logging.debug("Running cmd_aupdate")
     oled.write_line(0, "Running git pull", 1)
     oled.write_line(1, "....", 1)
     time.sleep(0.5)
@@ -274,14 +280,17 @@ def cmd_aupdate(): # update code through git
         time.sleep(2)
     return False
 def cmd_ashutdown(): # set CMD to shutdown and then quit
+    logging.debug("Running cmd_ashutdown")
     global EXIT_CMD
     EXIT_CMD = "sudo shutdown -h now"
     return True
 def cmd_areboot(): # set CMD to reboot and then quit
+    logging.debug("Running cmd_areboot")
     global EXIT_CMD
     EXIT_CMD = "sudo shutdown -r now"
     return True
 def cmd_admin():
+    logging.debug("Running cmd_admin")
     admin_items = [("Exit", cmd_aexit),
                    ("Update", cmd_aupdate),
                    ("Shutdown", cmd_ashutdown),
@@ -307,6 +316,7 @@ def cmd_admin():
         loc %= len(admin_items)
 
 def cmd_tmotors():
+    logging.debug("Running cmd_tmotors")
     no = 0
     while True:
         state = list(MOTOR_PWM_THREAD_speeds[0])
@@ -346,6 +356,7 @@ def cmd_tmotors():
             return False
         no %= 5
 def cmd_tleds():
+    logging.debug("Running cmd_tleds")
     oled.write_line(1, "")
     for x in range(0, 16):
         oled.write_line(0, ("."*(x//4+1)).ljust(4), 1)
@@ -354,6 +365,7 @@ def cmd_tleds():
     set_led_int(0)
     return False
 def cmd_twiimote():
+    logging.debug("Running cmd_twiimote")
     if WIIMOTE is None:
         oled.write_line(0, "No wiimote", 1)
         oled.write_line(1, "conencted", 1)
@@ -388,6 +400,7 @@ def cmd_twiimote():
         time.sleep(0.2)
     return False
 def cmd_test():
+    logging.debug("Running cmd_test")
     test_items = [("Motors", cmd_tmotors),
                   ("LEDs", cmd_tleds),
                   ("Wiimote", cmd_twiimote)]
