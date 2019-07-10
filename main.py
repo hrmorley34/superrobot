@@ -39,7 +39,7 @@ def run_cmd(cmd):
     output = p.communicate()[0]
     return output.decode()
 def get_git_revision():
-    return run_cmd("git rev-parse --short HEAD").rstrip("\x00")
+    return run_cmd("git rev-parse --short HEAD").rstrip("\n")
 
 # -- Motor PWM thread --
 MOTOR_PWM_THREAD = multiprocessing.pool.ThreadPool(1)
