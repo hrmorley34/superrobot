@@ -48,7 +48,7 @@ def get_model():
     return run_cmd("cat /proc/device-tree/model").rstrip("\x00")
 
 def get_git_revision():
-    return run_cmd("git rev-parse --short HEAD")
+    return run_cmd("git rev-parse --short HEAD").rstrip("\x00")
 # ----------------------------
 
 oled.init()

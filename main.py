@@ -34,6 +34,13 @@ except pfd.NoPiFaceDigitalDetectedError:
 WIIMOTE = None
 EXIT_CMD = None
 
+def run_cmd(cmd):
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    return output.decode()
+def get_git_revision():
+    return run_cmd("git rev-parse --short HEAD").rstrip("\x00")
+
 # -- Motor PWM thread --
 MOTOR_PWM_THREAD = multiprocessing.pool.ThreadPool(1)
 MOTOR_PWM_THREAD_speeds = [(0, 0, 0, 0)]
@@ -269,6 +276,10 @@ def cmd_aupdate(): # update code through git
     if rcode == 0:
         oled.write_line(1, "Success!", 1)
         time.sleep(1)
+        git_rev = get_git_revision()
+        oled.write_line(0, "Now on revision", 1)
+        oled.write_line(1, git_rev, 1)
+        time.sleep(2)
         oled.write_lines("Restart for pull",
                          " to take effect ")
         time.sleep(2)
@@ -277,6 +288,10 @@ def cmd_aupdate(): # update code through git
         time.sleep(1)
         oled.write_line(0, "Try manually", 1)
         oled.write_line(1, "pulling/merging", 1)
+        time.sleep(2)
+        git_rev = get_git_revision()
+        oled.write_line(0, "Still on revision", 1)
+        oled.write_line(1, git_rev, 1)
         time.sleep(2)
     return False
 def cmd_ashutdown(): # set CMD to shutdown and then quit
