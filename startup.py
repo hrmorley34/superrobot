@@ -72,8 +72,9 @@ try:
         time.sleep(3)
 
     logging.debug("OLED: Displaying code revision")
+    git_rev = get_git_revision()
     oled.write_line(0, "Code revision:", 1)
-    oled.write_line(1, get_git_revision(), 1)
+    oled.write_line(1, git_rev, 1)
     time.sleep(2)
 
     logging.debug("OLED: Displaying model")
